@@ -72,7 +72,9 @@ let html="";
 
 rows.reverse().slice(0,5).forEach(row=>{
 
-const col = row.split(",");
+const col = row.match(/(".*?"|[^",]+)(?=\s*,|\s*$)/g);
+
+if(!col) return;
 
 const nama = col[1];
 const rating = col[3];
@@ -95,7 +97,3 @@ document.getElementById("comments").innerHTML = html;
 });
 
 </script>
-
-</body>
-</html>
-
