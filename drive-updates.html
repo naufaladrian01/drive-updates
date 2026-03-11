@@ -1,0 +1,32 @@
+<div id="updates"></div>
+
+<script>
+
+const API_KEY = "AIzaSyAm1XgmFz2loEuBtfYb6778gwuFKhh8z-k";
+const FOLDER_ID = "1MIE35z9EfbaacVMQLgyf6WaLPYctBOFs";
+
+const url = `https://www.googleapis.com/drive/v3/files?q='${FOLDER_ID}'+in+parents&orderBy=createdTime desc&key=${API_KEY}`;
+
+fetch(url)
+.then(response => response.json())
+.then(data => {
+
+ let html = "<h3>Recent Updates</h3>";
+
+ data.files.slice(0,10).forEach(file => {
+
+  html += `
+  <div>
+   📄 <a href="https://drive.google.com/file/d/${file.id}/view" target="_blank">
+   ${file.name}
+   </a>
+  </div>
+  `;
+
+ });
+
+ document.getElementById("updates").innerHTML = html;
+
+});
+
+</script>
