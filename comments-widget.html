@@ -1,37 +1,46 @@
 <!DOCTYPE html>
 <html>
 <head>
+
 <meta charset="UTF-8">
 
 <style>
 
 body{
-font-family:Arial;
-margin:0;
-padding:10px;
+font-family:Arial, sans-serif;
 background:#f5f5f5;
+padding:10px;
+}
+
+h3{
+text-align:center;
 }
 
 #comments{
-max-width:700px;
+max-width:500px;
 margin:auto;
 }
 
-.comment{
+.comment-card{
 background:white;
-padding:12px;
-border-radius:8px;
-margin-bottom:10px;
-box-shadow:0 1px 4px rgba(0,0,0,0.1);
+padding:15px;
+border-radius:10px;
+box-shadow:0 2px 6px rgba(0,0,0,0.1);
+margin-bottom:12px;
 }
 
-.name{
+.comment-name{
 font-weight:bold;
+margin-bottom:5px;
 }
 
-.stars{
-color:#f5b301;
-margin:4px 0;
+.comment-rating{
+color:#f4b400;
+margin-bottom:5px;
+}
+
+.comment-text{
+font-size:14px;
 }
 
 </style>
@@ -46,40 +55,42 @@ margin:4px 0;
 
 <script>
 
-const sheetURL =
-"https://docs.google.com/spreadsheets/d/e/2PACX-1vQVcYZu3iTM5xqZZUXev-OtcR6BGhbhf0TwGa4QWRhEBEF5H3OmKJ4MdmpSyj6h8C9WX7AvPBEWc2Yt/pubhtml";
+const SHEET_URL =
+"https://docs.google.com/spreadsheets/d/e/2PACX-1vQVcYZu3iTM5xqZZUXev-OtcR6BGhbhf0TwGa4QWRhEBEF5H3OmKJ4MdmpSyj6h8C9WX7AvPBEWc2Yt/pubhtml/pub?output=csv";
 
-fetch(sheetURL)
-.then(res => res.text())
+fetch(SHEET_URL)
+.then(response => response.text())
 .then(data => {
 
 const rows = data.split("\n").slice(1);
 
-let html="";
+let html = "";
 
-rows.reverse().slice(0,10).forEach(row=>{
+rows.reverse().slice(0,6).forEach(row => {
 
-let cols=row.split(",");
+const cols = row.split(",");
 
-let nama=cols[1];
-let rating=cols[3];
-let komentar=cols[4];
+const nama = cols[1];
+const rating = cols[3];
+const komentar = cols[4];
 
-let stars="";
+if(!nama || !komentar) return;
 
-for(let i=0;i<rating;i++){
-stars+="⭐";
-}
+html += `
 
-html+=`
+<div class="comment-card">
 
-<div class="comment">
+<div class="comment-name">
+👤 ${nama}
+</div>
 
-<div class="name">👤 ${nama}</div>
+<div class="comment-rating">
+⭐ ${rating}
+</div>
 
-<div class="stars">${stars}</div>
-
-<div>${komentar}</div>
+<div class="comment-text">
+${komentar}
+</div>
 
 </div>
 
@@ -87,7 +98,7 @@ html+=`
 
 });
 
-document.getElementById("comments").innerHTML=html;
+document.getElementById("comments").innerHTML = html;
 
 });
 
