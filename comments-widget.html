@@ -1,47 +1,48 @@
 <!DOCTYPE html>
 <html>
 <head>
-
 <meta charset="UTF-8">
 
 <style>
 
 body{
-font-family:Arial, sans-serif;
-background:transparent;
-padding:5px;
 margin:0;
+padding:0;
+background:transparent;
+font-family:Arial, sans-serif;
 }
 
-h3{
-text-align:center;
-}
-
-#comments{
+.widget{
 max-width:450px;
 margin:auto;
 }
 
-.comment-card{
-background:white;
-padding:15px;
-border-radius:10px;
-box-shadow:0 2px 6px rgba(0,0,0,0.1);
-margin-bottom:12px;
-}
-
-.comment-name{
+.title{
+text-align:center;
 font-weight:bold;
-margin-bottom:5px;
+margin-bottom:10px;
 }
 
-.comment-rating{
+.comment{
+background:white;
+padding:12px;
+border-radius:8px;
+box-shadow:0 2px 5px rgba(0,0,0,0.1);
+margin-bottom:10px;
+}
+
+.name{
+font-weight:bold;
+margin-bottom:4px;
+}
+
+.rating{
 color:#f4b400;
-margin-bottom:5px;
+font-size:14px;
 }
 
-.comment-text{
-font-size:14px;
+.text{
+font-size:13px;
 }
 
 </style>
@@ -50,51 +51,41 @@ font-size:14px;
 
 <body>
 
-<h3>Komentar Pengguna</h3>
+<div class="widget">
+
+<div class="title">Komentar Pengguna</div>
 
 <div id="comments"></div>
 
+</div>
+
 <script>
 
-const SHEET_URL =
-"https://docs.google.com/spreadsheets/d/e/2PACX-1vQVcYZu3iTM5xqZZUXev-OtcR6BGhbhf0TwGa4QWRhEBEF5H3OmKJ4MdmpSyj6h8C9WX7AvPBEWc2Yt/pubhtml/pub?output=csv";
+const SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQVcYZu3iTM5xqZZUXev-OtcR6BGhbhf0TwGa4QWRhEBEF5H3OmKJ4MdmpSyj6h8C9WX7AvPBEWc2Yt/pubhtml/pub?output=csv";
 
 fetch(SHEET_URL)
-.then(response => response.text())
+.then(r => r.text())
 .then(data => {
 
 const rows = data.split("\n").slice(1);
+let html="";
 
-let html = "";
+rows.reverse().slice(0,5).forEach(row=>{
 
-rows.reverse().slice(0,6).forEach(row => {
+const col = row.split(",");
 
-const cols = row.split(",");
-
-const nama = cols[1];
-const rating = cols[3];
-const komentar = cols[4];
+const nama = col[1];
+const rating = col[3];
+const komentar = col[4];
 
 if(!nama || !komentar) return;
 
 html += `
-
-<div class="comment-card">
-
-<div class="comment-name">
-👤 ${nama}
+<div class="comment">
+<div class="name">👤 ${nama}</div>
+<div class="rating">⭐ ${rating}</div>
+<div class="text">${komentar}</div>
 </div>
-
-<div class="comment-rating">
-⭐ ${rating}
-</div>
-
-<div class="comment-text">
-${komentar}
-</div>
-
-</div>
-
 `;
 
 });
@@ -107,4 +98,3 @@ document.getElementById("comments").innerHTML = html;
 
 </body>
 </html>
-
