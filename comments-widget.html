@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+
+<style>
+
+body{
+font-family:Arial;
+margin:0;
+padding:10px;
+background:#f5f5f5;
+}
+
+#comments{
+max-width:700px;
+margin:auto;
+}
+
+.comment{
+background:white;
+padding:12px;
+border-radius:8px;
+margin-bottom:10px;
+box-shadow:0 1px 4px rgba(0,0,0,0.1);
+}
+
+.name{
+font-weight:bold;
+}
+
+.stars{
+color:#f5b301;
+margin:4px 0;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h3>Komentar Pengguna</h3>
+
+<div id="comments"></div>
+
+<script>
+
+const sheetURL =
+"https://docs.google.com/spreadsheets/d/e/2PACX-1vQVcYZu3iTM5xqZZUXev-OtcR6BGhbhf0TwGa4QWRhEBEF5H3OmKJ4MdmpSyj6h8C9WX7AvPBEWc2Yt/pubhtml";
+
+fetch(sheetURL)
+.then(res => res.text())
+.then(data => {
+
+const rows = data.split("\n").slice(1);
+
+let html="";
+
+rows.reverse().slice(0,10).forEach(row=>{
+
+let cols=row.split(",");
+
+let nama=cols[1];
+let rating=cols[3];
+let komentar=cols[4];
+
+let stars="";
+
+for(let i=0;i<rating;i++){
+stars+="⭐";
+}
+
+html+=`
+
+<div class="comment">
+
+<div class="name">👤 ${nama}</div>
+
+<div class="stars">${stars}</div>
+
+<div>${komentar}</div>
+
+</div>
+
+`;
+
+});
+
+document.getElementById("comments").innerHTML=html;
+
+});
+
+</script>
+
+</body>
+</html>
